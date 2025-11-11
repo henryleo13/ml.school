@@ -25,6 +25,10 @@ class Environment(FlowSpec):
         # The `METAFLOW_VARIABLE` environment variable will be available locally, but
         # it won't be available when running the flow on a remote compute environment.
         print(os.getenv("METAFLOW_VARIABLE"))
+        try:
+            print(os.getenv("VARIABLE"))
+        except Exception as e:
+            print(f"Error occurred: {e}")
 
 
 if __name__ == "__main__":

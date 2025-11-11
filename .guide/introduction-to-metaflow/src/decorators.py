@@ -14,7 +14,7 @@ class logger_flow(FlowMutator):  # noqa: N801
 
     def mutate(self, mutable_flow):
         """Add the log decorator to every step in the flow."""
-        for _, flow_step in mutable_flow.steps:
+        for _, flow_step in mutable_flow.steps: # flow_name, flow_step
             flow_step.add_decorator("log", duplicates=flow_step.IGNORE)
 
 
