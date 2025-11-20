@@ -214,7 +214,7 @@ class Model(mlflow.pyfunc.PythonModel):
         if not os.getenv("KERAS_BACKEND"):
             os.environ["KERAS_BACKEND"] = "tensorflow"
 
-        import keras
+        import keras, xgboost, sklearn
 
         self.logger.info("Keras backend: %s", os.environ.get("KERAS_BACKEND"))
 
@@ -226,7 +226,15 @@ class Model(mlflow.pyfunc.PythonModel):
         self.target_transformer = joblib.load(context.artifacts["target_transformer"])
 
         # Then, we can load the Keras model we trained.
-        self.model = keras.saving.load_model(context.artifacts["model"])
+        model_extension = Path(context.artifacts["model"]).suffix
+        if model_extension == ".keras":
+            self.model = keras.saving.load_model(context.artifacts["model"])
+        elif model_extension == ".json":
+            self.model = xgboost.XGBClassifier()
+            self.model.load_model(context.artifacts["model"])
+        elif model_extension == ".joblib":
+            self.model = joblib.load(context.artifacts["model"])
+
 
     def _configure_logging(self):
         """Configure how the logging system will behave."""

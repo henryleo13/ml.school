@@ -37,8 +37,20 @@ def dataset(step_name, flow, inputs=None, attr=None):  # noqa: ARG001
         flow.data = None
         yield
     else:
-        # If we find the dataset file, we can load it and process it.
-        data = pd.read_csv(flow.dataset)
+
+        # if path is a folder, read all csv files in the folder
+        if Path(flow.dataset).is_dir():
+            all_files = [pd.read_csv(file) for file in Path(flow.dataset).glob("*.csv")]
+
+            flow.logger.info(
+                "Found %d CSV files in folder %s",
+                len(all_files),
+                flow.dataset,
+            )
+            data = pd.concat(all_files, ignore_index=True)
+        else:
+            # If we find the dataset file, we can load it and process it.
+            data = pd.read_csv(flow.dataset)
 
         # Replace extraneous values in the sex column with NaN
         data["sex"] = data["sex"].replace(".", np.nan)

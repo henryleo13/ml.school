@@ -1,0 +1,23 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "Run Metaflow",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/pipelines/training_hw.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--with", "retry",
+                "run",
+                "--accuracy-threshold", "0.9",
+                "--dataset", "data/data_folder/",
+                "--model-selection", "random_forest"
+            ]
+        }
+    ]
+}
